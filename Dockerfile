@@ -3,11 +3,28 @@ FROM apache/airflow:2.9.2
 USER root
 
 RUN apt-get update && apt-get install -f -y \
-    wget unzip xvfb libxi6 libgconf-2-4 libnss3 libxss1 libappindicator1 libu2f-udev \
+    wget unzip xvfb libxi6 libgconf-2-4 libnss3 libxss1 libappindicator1 libu2f-udev gnupg \
     && rm -rf /var/lib/apt/lists/*
+
+# Устанавливаем Google Chrome
+RUN wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | apt-key add - && \
+    echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google-chrome.list && \
+    apt-get update && apt-get install -y google-chrome-stable
+
+# Узнаем версию Chrome и ставим соответствующий ChromeDriver
+RUN CHROME_VERSION=$(google-chrome --version | awk '{print $3}' | cut -d '.' -f 1) && \
+    DRIVER_VERSION=$(wget -qO- "https://chromedriver.storage.googleapis.com/LATEST_RELEASE_${CHROME_VERSION}") && \
+    wget -q "https://chromedriver.storage.googleapis.com/${DRIVER_VERSION}/chromedriver_linux64.zip" && \
+    unzip chromedriver_linux64.zip -d /usr/local/bin/ && \
+    rm chromedriver_linux64.zip && chmod +x /usr/local/bin/chromedriver
 
 USER airflow
 
 COPY requirements.txt .
 
 RUN pip3 install -r requirements.txt
+
+# Переменные окружения для Selenium
+ENV PATH="/usr/local/bin:${PATH}"
+ENV CHROME_BIN="/usr/bin/google-chrome"
+ENV CHROMEDRIVER_PATH="/usr/local/bin/chromedriver"

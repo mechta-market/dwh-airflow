@@ -1,2 +1,15 @@
+psycopg2-binary==2.9.9
+clickhouse-driver==0.2.8
+clickhouse-connect
+requests
+pandas==2.1.4
+
+apache-airflow-providers-google
+apache-airflow-providers-postgres
+
+gspread
+gspread-dataframe
+minio
 selenium==4.21.0
 webdriver-manager==4.0.1
+openpyxl

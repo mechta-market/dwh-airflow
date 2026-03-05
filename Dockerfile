@@ -4,6 +4,7 @@ USER root
 RUN apt-get update && apt-get install -y --no-install-recommends \
     wget unzip xvfb libxi6 libgconf-2-4 libnss3 libxss1 libappindicator1 libu2f-udev gnupg \
     build-essential libpq-dev ca-certificates git \
+    smbclient \
  && rm -rf /var/lib/apt/lists/*
 
 RUN wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | apt-key add - \
@@ -24,7 +25,8 @@ ENV CHROMEDRIVER_PATH="/usr/local/bin/chromedriver"
 
 COPY requirements.txt .
 RUN pip install --no-cache-dir --upgrade pip setuptools wheel \
- && pip install --no-cache-dir -r requirements.txt
+ && pip install --no-cache-dir -r requirements.txt \
+ && pip install --no-cache-dir pysmb
 
 ARG DBT_VERSION=1.7.14
 RUN pip install --no-cache-dir "dbt-core==${DBT_VERSION}" "dbt-postgres==${DBT_VERSION}"

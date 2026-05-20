@@ -16,3 +16,4 @@ openpyxl
 transliterate
 mlflow
 lightgbm
+s3fs

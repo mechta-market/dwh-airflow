@@ -17,3 +17,5 @@ transliterate
 mlflow
 lightgbm
 s3fs
+smbclient
+smbprotocol

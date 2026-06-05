@@ -18,3 +18,4 @@ mlflow
 lightgbm
 s3fs
 smbprotocol
+openai

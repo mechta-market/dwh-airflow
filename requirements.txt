@@ -19,3 +19,4 @@ lightgbm
 s3fs
 smbprotocol
 openai
+xgboost>=1.7
